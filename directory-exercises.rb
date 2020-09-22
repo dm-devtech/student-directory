@@ -23,11 +23,16 @@ def print_header
 end
 
 def print(students)
-  students.each_with_index do |student, index|
-    num = index + 1 
-    puts "#{num}. #{student[:name]} (#{student[:cohort]} cohort)"
+  counter = 1
+  while counter <= students.length do
+    students.select do |v| 
+      puts counter.to_s+". "+v[:name]
+      puts "cohort: "+v[:cohort].to_s
+      counter += 1
+    end  
   end 
 end
+
 def print_footer(names)
   puts "Overall, we have #{names.count} great students"
 end
