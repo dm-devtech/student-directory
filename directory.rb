@@ -98,6 +98,7 @@ def print_menu
   puts "1. Input the students"
   puts "2. Show the students"
   puts "3. Save the list to students.csv"
+  puts "4. Load the list from students.csv"
   puts "9. Exit"
 end
 
@@ -115,6 +116,8 @@ def process(selection)
       show_students
     when "3"
       save_students
+    when "4"
+      load_students
     when "9"
       exit
     else
@@ -130,6 +133,15 @@ def save_students
     student_data = [student[:name], student[:cohort]] #on every iteration creates array with name and cohort
     csv_line = student_data.join(",") #convert to comma separated string and joins all elements from the string
     file.puts csv_line #writes data to file
+  end
+  file.close
+end
+
+def load_students
+  file = File.open("students.csv", "r") #open the file as reader
+  file.readlines.each do |line| #read all lines into an array and iterate over it
+    name, cohort = line.chomp.split(",") #(parrallel assignment) discard new line character and split at comma and assign to name and cohort variables
+    @students << {name: name, cohort: cohort.to_sym} #once we have the name and cohort we create a new hash and put it into list of students
   end
   file.close
 end
