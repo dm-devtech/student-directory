@@ -1,52 +1,63 @@
 @students = [] # an empty array accessible to all methods
 
+@name = "none"
+@cohort = "none"
+@hobby = "none"
+@countryofbirth = "none"
+@height = "none"
+
+
+def pushtostudents
+  @students << {name: @name, cohort: @cohort.to_sym, hobby: @hobby,
+  countryofbirth: @countryofbirth, height: @height}
+end
+
 def input_students
   puts "Please enter the names of the students and their cohort"
   puts "To finish, do not enter a name or other details - just press return to skip"
   #create an empty array
   @students = []
   #get the first name
-  name = STDIN.gets.slice
+  @name = STDIN.gets.strip
   puts "enter a cohort"
-  cohort = STDIN.gets.slice
+  @cohort = STDIN.gets.strip
   while true do
-    if name.empty? 
+    if @name.empty? 
       puts "you must enter a name"
-      name = STDIN.gets.slice
-    elsif cohort.empty?
+      @name = STDIN.gets.strip
+    elsif @cohort.empty?
       puts "you must enter a cohort"
-      cohort = STDIN.gets.slice.to_sym
+      @cohort = STDIN.gets.strip.to_sym
     else 
       break
     end
   end
   puts "enter hobby"
-  hobby = STDIN.gets.slice
+  @hobby = STDIN.gets.strip
   puts "enter birth country"
-  countryofbirth = STDIN.gets.slice
+  @countryofbirth = STDIN.gets.strip
   puts "enter height"
-  height = STDIN.gets.slice
+  @height = STDIN.gets.strip
   #while the name is not empty, repeat this code
-  while !name.empty? do
+  while !@name.empty? do
     #add the student hash to the array
-    @students << {name: name, cohort: cohort, hobby: hobby,
-    countryofbirth: countryofbirth, height: height}
+    pushtostudents
     if @students.count == 1
       puts "Now we have #{@students.count} student"
     else 
       puts "Now we have #{@students.count} students"
     end
     puts "enter a new student: (press return to skip)"
-    name = STDIN.gets.slice
-    if !name.empty? 
+    @name = STDIN.gets.strip
+    if !@name.empty? 
       puts "enter a cohort"
-      cohort = STDIN.gets.slice
+      @cohort = STDIN.gets.strip
       puts "enter hobby"
-      hobby = STDIN.gets.slice
+      @hobby = STDIN.gets.strip
       puts "enter birth country"
-      countryofbirth = STDIN.gets.slice
+      @countryofbirth = STDIN.gets.strip
       puts "enter height"
-      height = STDIN.gets.slice
+      @height = STDIN.gets.strip
     else
     end
   end
@@ -140,8 +151,9 @@ end
 def load_students(filename = "students.csv")
   file = File.open("students.csv", "r") #open the file as reader
   file.readlines.each do |line| #read all lines into an array and iterate over it
-    name, cohort = line.chomp.split(",") #(parrallel assignment) discard new line character and split at comma and assign to name and cohort variables
-    @students << {name: name, cohort: cohort.to_sym} #once we have the name and cohort we create a new hash and put it into list of students
+    @name, @cohort = line.chomp.split(",") #(parrallel assignment) discard new line character and split at comma and assign to name and cohort variables
+    pushtostudents
+     #once we have the name and cohort we create a new hash and put it into list of students
   end
   file.close
 end
@@ -158,4 +170,5 @@ def try_load_students
   end
 end
 
+process("4")
 interactive_menu
