@@ -98,8 +98,8 @@ end
 def print_menu
   puts "1. Input the students"
   puts "2. Show the students"
-  puts "3. Save the list to students.csv"
-  puts "4. Load the list from students.csv"
+  puts "3. Save the list to file"
+  puts "4. Load the list from file"
   puts "9. Exit"
 end
 
@@ -136,26 +136,27 @@ def save_students
   puts "Enter a filename to save"
   savefilename = STDIN.gets.strip
   #open the file for writing
-  file = File.open(savefilename, "w") #have to open the file first
+  File.open(savefilename, "w") do |f| #have to open the file first
   #iterate over the students
-  @students.each do |student|
-    student_data = [student[:name], student[:cohort]] #on every iteration creates array with name and cohort
-    csv_line = student_data.join(",") #convert to comma separated string and joins all elements from the string
-    file.puts csv_line #writes data to file
+    @students.each do |student|
+      student_data = [student[:name], student[:cohort], student[:hobby], 
+      student[:countryofbirth], student[:height]] #on every iteration creates array with name and cohort
+      csv_line = student_data.join(",") #convert to comma separated string and joins all elements from the string
+      f.puts csv_line #writes data to file
+    end
   end
-  file.close
 end
 
 def load_students(filename = "students.csv")
   puts "enter a filename to load"
   loadfilename = STDIN.gets.strip
-  file = File.open(loadfilename, "r") #open the file as reader
-  file.readlines.each do |line| #read all lines into an array and iterate over it
-    @name, @cohort = line.chomp.split(",") #(parrallel assignment) discard new line character and split at comma and assign to name and cohort variables
-    pushtostudents
+  File.open(loadfilename, "r") do |h| #open the file as reader
+    h.readlines.each do |line| #read all lines into an array and iterate over it
+      @name, @cohort, @hobby, @countryofbirth, @height = line.chomp.split(",") #(parrallel assignment) discard new line character and split at comma and assign to name and cohort variables
+      pushtostudents
      #once we have the name and cohort we create a new hash and put it into list of students
+    end
   end
-  file.close
 end
 
 def try_load_students
