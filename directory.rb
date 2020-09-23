@@ -17,7 +17,7 @@ def input_students
   puts "To finish, do not enter a name or other details - just press return to skip"
   #create an empty array
   @students = []
-  #get the first name
+  #get the name
   @name = STDIN.gets.strip
   puts "enter a cohort"
   @cohort = STDIN.gets.strip
@@ -32,12 +32,8 @@ def input_students
       break
     end
   end
-  puts "enter hobby"
-  @hobby = STDIN.gets.strip
-  puts "enter birth country"
-  @countryofbirth = STDIN.gets.strip
-  puts "enter height"
-  @height = STDIN.gets.strip
+  puts "enter hobby, birth country, height (press return after each)"
+  @hobby, @countryofbirth, @height  = STDIN.gets.strip, STDIN.gets.strip, STDIN.gets.strip
   #while the name is not empty, repeat this code
   while !@name.empty? do
     #add the student hash to the array
@@ -50,14 +46,8 @@ def input_students
     puts "enter a new student: (press return to skip)"
     @name = STDIN.gets.strip
     if !@name.empty? 
-      puts "enter a cohort"
-      @cohort = STDIN.gets.strip
-      puts "enter hobby"
-      @hobby = STDIN.gets.strip
-      puts "enter birth country"
-      @countryofbirth = STDIN.gets.strip
-      puts "enter height"
-      @height = STDIN.gets.strip
+      puts "enter a cohort, hobby, country of birth, height (press return after each)"
+      @cohort, @hobby, @countryofbirth, @height = STDIN.gets.strip, STDIN.gets.strip, STDIN.gets.strip, STDIN.gets.strip
     else
     end
   end
@@ -79,13 +69,13 @@ def print(students)
   new_students.each {|k,v| newerstudents << v}
   while counter <= @students.length do
     newerstudents.flatten.select do |v| 
-      puts counter.to_s+"."+ " name: "+v[:name].to_s.split(" ")[0].center(24)
-      puts "cohort: "+v[:cohort].to_s.center(30)
-      puts "hobby: "+v[:hobby].to_s.center(32)
-      puts "country of birth: "+v[:countryofbirth].to_s.center(4)
-      puts "height: "+v[:height].to_s.center(26)
-      counter += 1
-    end  
+    puts counter.to_s+"."+ " name: "+v[:name].to_s.split(" ")[0].center(24)
+    puts "cohort: "+v[:cohort].to_s.center(30)
+    puts "hobby: "+v[:hobby].to_s.center(32)
+    puts "country of birth: "+v[:countryofbirth].to_s.center(4)
+    puts "height: "+v[:height].to_s.center(26)
+    counter += 1
+  end  
   end
 end 
 
@@ -170,5 +160,4 @@ def try_load_students
   end
 end
 
-process("4")
 interactive_menu
