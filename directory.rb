@@ -6,26 +6,26 @@ def input_students
   #create an empty array
   @students = []
   #get the first name
-  name = gets.strip
+  name = STDIN.gets.slice
   puts "enter a cohort"
-  cohort = gets.strip.to_sym
+  cohort = STDIN.gets.slice
   while true do
     if name.empty? 
       puts "you must enter a name"
-      name = gets.strip
+      name = STDIN.gets.slice
     elsif cohort.empty?
       puts "you must enter a cohort"
-      cohort = gets.strip.intern
+      cohort = STDIN.gets.slice.to_sym
     else 
       break
     end
   end
   puts "enter hobby"
-  hobby = gets.strip
+  hobby = STDIN.gets.slice
   puts "enter birth country"
-  countryofbirth = gets.strip
+  countryofbirth = STDIN.gets.slice
   puts "enter height"
-  height = gets.strip
+  height = STDIN.gets.slice
   #while the name is not empty, repeat this code
   while !name.empty? do
     #add the student hash to the array
@@ -37,16 +37,16 @@ def input_students
       puts "Now we have #{@students.count} students"
     end
     puts "enter a new student: (press return to skip)"
-    name = gets.strip
+    name = STDIN.gets.slice
     if !name.empty? 
       puts "enter a cohort"
-      cohort = gets.strip.to_sym
+      cohort = STDIN.gets.slice
       puts "enter hobby"
-      hobby = gets.strip
+      hobby = STDIN.gets.slice
       puts "enter birth country"
-      countryofbirth = gets.strip
+      countryofbirth = STDIN.gets.slice
       puts "enter height"
-      height = gets.strip
+      height = STDIN.gets.slice
     else
     end
   end
@@ -90,7 +90,7 @@ def interactive_menu
   @students = []
   loop do
     print_menu
-    process(gets.chomp)
+    process(STDIN.gets.chomp)
   end
 end
 
@@ -137,13 +137,25 @@ def save_students
   file.close
 end
 
-def load_students
+def load_students(filename = "students.csv")
   file = File.open("students.csv", "r") #open the file as reader
   file.readlines.each do |line| #read all lines into an array and iterate over it
     name, cohort = line.chomp.split(",") #(parrallel assignment) discard new line character and split at comma and assign to name and cohort variables
     @students << {name: name, cohort: cohort.to_sym} #once we have the name and cohort we create a new hash and put it into list of students
   end
   file.close
+end
+
+def try_load_students
+  filename = ARGV.first # first argument from the command line
+  return if filename.nil? #get out of the method if it isn't given
+  if File.exists?(filename) #check if it exists
+    load_students(filename)
+    puts "Loaded #{@students.count} from #{filename}"
+  else #if it doesn't exist
+    puts "Sorry, #{filename} doesn't exist."
+    exit #quit the program
+  end
 end
 
 interactive_menu
