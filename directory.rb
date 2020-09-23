@@ -1,5 +1,6 @@
-@students = [] # an empty array accessible to all methods
+require 'csv'
 
+@students = [] # an empty array accessible to all methods
 @name = "none"
 @cohort = "none"
 @hobby = "none"
@@ -136,12 +137,12 @@ def save_students
   puts "Enter a filename to save"
   savefilename = STDIN.gets.strip
   #open the file for writing
-  File.open(savefilename, "w") do |f| #have to open the file first
+  CSV.open(savefilename, "wb") do |f| #have to open the file first
   #iterate over the students
     @students.each do |student|
       student_data = [student[:name], student[:cohort], student[:hobby], 
       student[:countryofbirth], student[:height]] #on every iteration creates array with name and cohort
-      csv_line = student_data.join(",") #convert to comma separated string and joins all elements from the string
+      csv_line = student_data.join(",").split(",") #convert to comma separated string and joins all elements from the string
       f.puts csv_line #writes data to file
     end
   end
@@ -150,13 +151,11 @@ end
 def load_students(filename = "students.csv")
   puts "enter a filename to load"
   loadfilename = STDIN.gets.strip
-  File.open(loadfilename, "r") do |h| #open the file as reader
-    h.readlines.each do |line| #read all lines into an array and iterate over it
-      @name, @cohort, @hobby, @countryofbirth, @height = line.chomp.split(",") #(parrallel assignment) discard new line character and split at comma and assign to name and cohort variables
-      pushtostudents
+  CSV.foreach(loadfilename)do |h| 
+    @name, @cohort, @hobby, @countryofbirth, @height = h.join(",").split(",") #(parrallel assignment) discard new line character and split at comma and assign to name and cohort variables
+    pushtostudents # pushes details to students array
      #once we have the name and cohort we create a new hash and put it into list of students
     end
-  end
 end
 
 def try_load_students
