@@ -1,20 +1,23 @@
+@students = [] # an empty array accessible to all methods
+
 def input_students
   puts "Please enter the names of the students and their cohort"
   puts "To finish, do not enter a name or other details - just press return to skip"
   #create an empty array
-  students = []
+  @students = []
   #get the first name
   name = gets.strip
   puts "enter a cohort"
   cohort = gets.strip.to_sym
   while true do
     if name.empty? 
-    puts "you must enter a name"
-    name = gets.strip
+      puts "you must enter a name"
+      name = gets.strip
     elsif cohort.empty?
-    puts "you must enter a cohort"
-    cohort = gets.strip.intern
-    else break
+      puts "you must enter a cohort"
+      cohort = gets.strip.intern
+    else 
+      break
     end
   end
   puts "enter hobby"
@@ -26,12 +29,12 @@ def input_students
   #while the name is not empty, repeat this code
   while !name.empty? do
     #add the student hash to the array
-    students << {name: name, cohort: cohort, hobby: hobby,
+    @students << {name: name, cohort: cohort, hobby: hobby,
     countryofbirth: countryofbirth, height: height}
-    if students.count == 1
-      puts "Now we have #{students.count} student"
+    if @students.count == 1
+      puts "Now we have #{@students.count} student"
     else 
-      puts "Now we have #{students.count} students"
+      puts "Now we have #{@students.count} students"
     end
     puts "enter a new student: (press return to skip)"
     name = gets.strip
@@ -48,7 +51,7 @@ def input_students
     end
   end
     #return the array of students
-  students
+  @students
 end 
 
 def print_header
@@ -58,12 +61,12 @@ end
 
 def print(students)
   counter = 1
-  new_students = students.group_by {|x| x[:cohort]}
+  new_students = @students.group_by {|x| x[:cohort]}
   cohorts = []
   students.map { |s| s[:cohort] }.uniq.each { |c| cohorts << c }
   newerstudents = []
   new_students.each {|k,v| newerstudents << v}
-  while counter <= students.length do
+  while counter <= @students.length do
     newerstudents.flatten.select do |v| 
       puts counter.to_s+"."+ " name: "+v[:name].to_s.split(" ")[0].center(24)
       puts "cohort: "+v[:cohort].to_s.center(30)
@@ -84,27 +87,35 @@ def print_footer(names)
 end
 
 def interactive_menu
-  students = []
+  @students = []
   loop do
-    #1 print the menu and ask the user what to do
-    puts "1. Input the students"
-    puts "2. Show the students"
-    puts "9. Exit" # we'll be adding more lines
-    #2 read the input and save it into a variable
-    selection = gets.chomp
-    #3 do what the user has asked
-    case selection
+    print_menu
+    process(gets.chomp)
+  end
+end
+
+def print_menu
+  puts "1. Input the students"
+  puts "2. Show the students"
+  puts "9. Exit"
+end
+
+def show_students
+  print_header
+  print(@students)
+  print_footer(@students)
+end
+
+def process(selection)
+  case selection
     when "1"
-      students = input_students
+      input_students
     when "2"
-      print_header
-      print(students)
-      print_footer(students)
+      show_students
     when "9"
-      exit # this will cause the program to terminate
+      exit
     else
-      puts "I don't know what you meant, try again"
-    end
+      puts "I don't know what you mean, try again"
   end
 end
 
