@@ -132,8 +132,11 @@ def process(selection)
 end
 
 def save_students
+  #filename input
+  puts "Enter a filename to save"
+  savefilename = STDIN.gets.strip
   #open the file for writing
-  file = File.open("students.csv", "w") #have to open the file first
+  file = File.open(savefilename, "w") #have to open the file first
   #iterate over the students
   @students.each do |student|
     student_data = [student[:name], student[:cohort]] #on every iteration creates array with name and cohort
@@ -144,7 +147,9 @@ def save_students
 end
 
 def load_students(filename = "students.csv")
-  file = File.open("students.csv", "r") #open the file as reader
+  puts "enter a filename to load"
+  loadfilename = STDIN.gets.strip
+  file = File.open(loadfilename, "r") #open the file as reader
   file.readlines.each do |line| #read all lines into an array and iterate over it
     @name, @cohort = line.chomp.split(",") #(parrallel assignment) discard new line character and split at comma and assign to name and cohort variables
     pushtostudents
