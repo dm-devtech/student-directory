@@ -6,7 +6,7 @@ require 'csv'
 @hobby = "none"
 @countryofbirth = "none"
 @height = "none"
-
+loadfilename = "students.csv"
 
 def pushtostudents
   @students << {name: @name, cohort: @cohort.to_sym, hobby: @hobby,
@@ -104,7 +104,18 @@ def print_menu
   puts "9. Exit"
 end
 
+def load_students_on_startup(loadfilename = "students.csv")
+  puts "enter a filename to load"
+  loadfilename = "students.csv"
+  CSV.foreach(loadfilename)do |h| 
+    @name, @cohort, @hobby, @countryofbirth, @height = h.join(",").split(",") #(parrallel assignment) discard new line character and split at comma and assign to name and cohort variables
+    pushtostudents # pushes details to students array
+    #once we have the name and cohort we create a new hash and put it into list of students
+    end
+end
+
 def show_students
+  load_students_on_startup
   print_header
   print(@students)
   print_footer(@students)
@@ -148,13 +159,13 @@ def save_students
   end
 end
 
-def load_students(filename = "students.csv")
+def load_students(loadfilename = "students.csv")
   puts "enter a filename to load"
   loadfilename = STDIN.gets.strip
   CSV.foreach(loadfilename)do |h| 
     @name, @cohort, @hobby, @countryofbirth, @height = h.join(",").split(",") #(parrallel assignment) discard new line character and split at comma and assign to name and cohort variables
     pushtostudents # pushes details to students array
-     #once we have the name and cohort we create a new hash and put it into list of students
+    #once we have the name and cohort we create a new hash and put it into list of students
     end
 end
 
