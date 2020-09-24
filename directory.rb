@@ -16,11 +16,8 @@ end
 def input_students
   puts "Please enter the names of the students and their cohort"
   puts "To finish, do not enter a name or other details - just press return to skip"
-  #create an empty array
   @students = []
-  #get the name
   @name = STDIN.gets.strip
-  puts "enter a cohort"
   @cohort = STDIN.gets.strip
   while true do
     if @name.empty? 
@@ -34,10 +31,8 @@ def input_students
     end
   end
   puts "enter hobby, birth country, height (press return after each)"
-  @hobby, @countryofbirth, @height  = STDIN.gets.strip, STDIN.gets.strip, STDIN.gets.strip
-  #while the name is not empty, repeat this code
+  @hobby, @countryofbirth, @height = STDIN.gets.strip, STDIN.gets.strip, STDIN.gets.strip
   while !@name.empty? do
-    #add the student hash to the array
     pushtostudents
     if @students.count == 1
       puts "Now we have #{@students.count} student"
@@ -52,7 +47,6 @@ def input_students
     else
     end
   end
-    #return the array of students
   @students
 end 
 
@@ -108,9 +102,8 @@ def load_students_on_startup(loadfilename = "students.csv")
   puts "enter a filename to load"
   loadfilename = "students.csv"
   CSV.foreach(loadfilename)do |h| 
-    @name, @cohort, @hobby, @countryofbirth, @height = h.join(",").split(",") #(parrallel assignment) discard new line character and split at comma and assign to name and cohort variables
-    pushtostudents # pushes details to students array
-    #once we have the name and cohort we create a new hash and put it into list of students
+    @name, @cohort, @hobby, @countryofbirth, @height = h.join(",").split(",") 
+    pushtostudents 
     end
 end
 
@@ -144,17 +137,14 @@ def process(selection)
 end
 
 def save_students
-  #filename input
   puts "Enter a filename to save"
   savefilename = STDIN.gets.strip
-  #open the file for writing
-  CSV.open(savefilename, "wb") do |f| #have to open the file first
-  #iterate over the students
+  CSV.open(savefilename, "wb") do |f| 
     @students.each do |student|
       student_data = [student[:name], student[:cohort], student[:hobby], 
-      student[:countryofbirth], student[:height]] #on every iteration creates array with name and cohort
-      csv_line = student_data.join(",").split(",") #convert to comma separated string and joins all elements from the string
-      f.puts csv_line #writes data to file
+      student[:countryofbirth], student[:height]] 
+      csv_line = student_data.join(",").split(",") 
+      f.puts csv_line 
     end
   end
 end
@@ -163,21 +153,20 @@ def load_students(loadfilename = "students.csv")
   puts "enter a filename to load"
   loadfilename = STDIN.gets.strip
   CSV.foreach(loadfilename)do |h| 
-    @name, @cohort, @hobby, @countryofbirth, @height = h.join(",").split(",") #(parrallel assignment) discard new line character and split at comma and assign to name and cohort variables
-    pushtostudents # pushes details to students array
-    #once we have the name and cohort we create a new hash and put it into list of students
+    @name, @cohort, @hobby, @countryofbirth, @height = h.join(",").split(",") 
+    pushtostudents 
     end
 end
 
 def try_load_students
-  filename = ARGV.first # first argument from the command line
-  return if filename.nil? #get out of the method if it isn't given
-  if File.exists?(filename) #check if it exists
+  filename = ARGV.first 
+  return if filename.nil? 
+  if File.exists?(filename) 
     load_students(filename)
     puts "Loaded #{@students.count} from #{filename}"
-  else #if it doesn't exist
+  else 
     puts "Sorry, #{filename} doesn't exist."
-    exit #quit the program
+    exit 
   end
 end
 
